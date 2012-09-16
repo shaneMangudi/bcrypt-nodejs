@@ -583,7 +583,7 @@ function genSalt(rounds, callback) {
 	if(!callback) {
 		throw "No callback function was given."
 	}
-	setTimeout(function() {
+	process.nextTick(function() {
 		var result = null;
 		var error = null;
 		try {
@@ -617,7 +617,7 @@ function hash(data, salt, progress, callback) {
 	if(!callback) {
 		throw "No callback function was given."
 	}
-	setTimeout(function() {
+	process.nextTick(function() {
 		var result = null;
 		var error = null;
 		try {
@@ -675,7 +675,7 @@ function compare(data, encrypted, callback) {
 	if(!callback) {
 		throw "No callback function was given."
 	}
-	setTimeout(function() {
+	process.nextTick(function() {
 		var result = null;
 		var error = null;
 		try {
