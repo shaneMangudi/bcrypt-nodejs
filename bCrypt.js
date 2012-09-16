@@ -580,6 +580,9 @@ function genSalt(rounds, callback) {
 			error - First parameter to the callback detailing any errors.
 			salt - Second parameter to the callback providing the generated salt.
 	*/
+	if(!callback) {
+		throw "No callback function was given."
+	}
 	setTimeout(function() {
 		var result = null;
 		var error = null;
@@ -611,7 +614,9 @@ function hash(data, salt, progress, callback) {
 			error - First parameter to the callback detailing any errors.
 			encrypted - Second parameter to the callback providing the encrypted form.
 	*/
-	
+	if(!callback) {
+		throw "No callback function was given."
+	}
 	setTimeout(function() {
 		var result = null;
 		var error = null;
@@ -630,11 +635,19 @@ function compareSync(data, encrypted) {
 		encrypted - [REQUIRED] - data to be compared to.
 	*/
 	
-	var same = true;
-	var hash_data = hashSync(data, encrypted.substr(0, encrypted.length-31));
+	if(typeof data != "string" ||  typeof encrypted != "string") {
+		throw "Incorrect arguments";
+	}
 	
 	var hash_data_length = hash_data.length;
 	var encrypted_length = encrypted.length;
+	
+	if(encrypted_length != 60) {
+		throw "Not a valid BCrypt hash.";
+	}
+	
+	var same = true;
+	var hash_data = hashSync(data, encrypted.substr(0, encrypted_length-31));
 	
 	same = hash_data_length == encrypted_length;
 	
@@ -659,7 +672,9 @@ function compare(data, encrypted, callback) {
 			error - First parameter to the callback detailing any errors.
 			same - Second parameter to the callback providing whether the data and encrypted forms match [true | false].
 	*/
-	
+	if(!callback) {
+		throw "No callback function was given."
+	}
 	setTimeout(function() {
 		var result = null;
 		var error = null;
@@ -674,6 +689,9 @@ function compare(data, encrypted, callback) {
 
 function getRounds(encrypted) {
 	//encrypted - [REQUIRED] - hash from which the number of rounds used should be extracted.
+	if(typeof encrypted != "string") {
+		throw "Incorrect arguments";
+	}
 	return Number(encrypted.split("$")[2]);
 }
 
