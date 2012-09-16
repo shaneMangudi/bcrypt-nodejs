@@ -41,28 +41,28 @@ console.log(hash9);
 var hash0 = bCrypt.hashSync("supersecret", null, null);
 console.log(hash0);
 
-console.log("\n\n True Compares \n");
+console.log("\n\n First Set of Compares \n");
 
 console.log(bCrypt.compareSync("super secret", hash1));
 console.log(bCrypt.compareSync("super secret", hash2));
-console.log(bCrypt.compareSync("super secret", hash3));
-console.log(bCrypt.compareSync("super secret", hash4));
 console.log(bCrypt.compareSync("super secret", hash5));
 console.log(bCrypt.compareSync("super secret", hash6));
+console.log(bCrypt.compareSync("super secret", hash9));
+console.log(bCrypt.compareSync("super secret", hash3));
+console.log(bCrypt.compareSync("super secret", hash4));
 console.log(bCrypt.compareSync("super secret", hash7));
 console.log(bCrypt.compareSync("super secret", hash8));
-console.log(bCrypt.compareSync("super secret", hash9));
 console.log(bCrypt.compareSync("super secret", hash0));
 
-console.log("\n\n False Compares \n");
+console.log("\n\n Second Set of Compares \n");
 
 console.log(bCrypt.compareSync("supersecret", hash1));
 console.log(bCrypt.compareSync("supersecret", hash2));
-console.log(bCrypt.compareSync("supersecret", hash3));
-console.log(bCrypt.compareSync("supersecret", hash4));
 console.log(bCrypt.compareSync("supersecret", hash5));
 console.log(bCrypt.compareSync("supersecret", hash6));
+console.log(bCrypt.compareSync("supersecret", hash9));
+console.log(bCrypt.compareSync("supersecret", hash3));
+console.log(bCrypt.compareSync("supersecret", hash4));
 console.log(bCrypt.compareSync("supersecret", hash7));
 console.log(bCrypt.compareSync("supersecret", hash8));
-console.log(bCrypt.compareSync("supersecret", hash9));
 console.log(bCrypt.compareSync("supersecret", hash0));

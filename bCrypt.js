@@ -639,7 +639,6 @@ function compareSync(data, encrypted) {
 		throw "Incorrect arguments";
 	}
 	
-	var hash_data_length = hash_data.length;
 	var encrypted_length = encrypted.length;
 	
 	if(encrypted_length != 60) {
@@ -647,7 +646,8 @@ function compareSync(data, encrypted) {
 	}
 	
 	var same = true;
-	var hash_data = hashSync(data, encrypted.substr(0, encrypted_length-31));
+	var hash_data = hashSync(data, encrypted.substr(0, encrypted_length-31));	
+	var hash_data_length = hash_data.length;
 	
 	same = hash_data_length == encrypted_length;
 	
