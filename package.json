@@ -1,0 +1,23 @@
+{
+  "name": "bcryptJS",
+  "description": "",
+  "version": "0.0.1",
+  "author": {
+    "name": "Shane Girish",
+    "email": "shaneGirish@gmail.com"
+  },
+  "keywords": [
+    "bcrypt",
+    "javascript",
+    "js",
+    "hash"
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/shaneGirish/bcryptJS.git"
+    }
+  ],
+  "main": "bCrypt.js",
+  "readme": ""
+}
