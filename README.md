@@ -8,7 +8,7 @@ Mainly, it doesn't let you set the seed length for creating the random byte arra
 I created this version due to a small [problem](https://github.com/ncb000gt/node.bcrypt.js/issues/102) I faced with [node.bcrypt.js].
 Basically, to deploy one of my apps which uses [node.bcrypt.js] on a winx64 platform, I have to force the user to download about 1.6gb of sdks, buildtools and other requirements of which some fail to install ! Microsoft :(
 
-This code is based on http://code.google.com/p/javascript-bcrypt/ and uses "crypto" to create random byte arrays.
+This code is based on [javascript-bcrypt] and uses "crypto" to create random byte arrays.
 
 Basic usage:
 -----------
@@ -67,6 +67,10 @@ API
 		* `result` - Second parameter to the callback providing whether the data and encrypted forms match [true | false].
 * `getRounds(encrypted)` - return the number of rounds used to encrypt a given hash
 	* `encrypted` - [REQUIRED] - hash from which the number of rounds used should be extracted.
-	
+
+Credits
+-------------------------
+I heavily reused code from [node.bcrypt.js]. Though "Clipperz Javascript Crypto Library" was removed and its functionality replaced with "crypto".
 
 [node.bcrypt.js]:https://github.com/ncb000gt/node.bcrypt.js.git
+[javascript-bcrypt]:http://code.google.com/p/javascript-bcrypt/
