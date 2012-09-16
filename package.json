@@ -1,6 +1,6 @@
 {
 	"name": "bcrypt-nodejs",
-	"description": "A JS bcrypt library for NodeJS.",
+	"description": "A native JS bcrypt library for NodeJS.",
 	"main": "./bCrypt",
 	"author": "Shane Girish (https://github.com/shaneGirish)",
 	"version": "0.0.1",
