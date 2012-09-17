@@ -70,7 +70,7 @@ API
 
 Credits
 -------------------------
-I heavily reused code from [node.bcrypt.js]. Though "Clipperz Javascript Crypto Library" was removed and its functionality replaced with "crypto".
+I heavily reused code from [javascript-bcrypt]. Though "Clipperz Javascript Crypto Library" was removed and its functionality replaced with "crypto".
 
 [node.bcrypt.js]:https://github.com/ncb000gt/node.bcrypt.js.git
 [javascript-bcrypt]:http://code.google.com/p/javascript-bcrypt/
