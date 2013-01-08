@@ -22,7 +22,7 @@ bcrypt.compareSync("veggies", hash); // false
 
 Asynchronous
 ```
-bcrypt.hash("bacon", null, function(err, hash) {
+bcrypt.hash("bacon", null, null, function(err, hash) {
 	// Store hash in your password DB.
 });
 
@@ -50,9 +50,10 @@ API
 * `hashSync(data, salt)`
 	* `data` - [REQUIRED] - the data to be encrypted.
 	* `salt` - [REQUIRED] - the salt to be used in encryption.
-* `hash(data, salt, cb)`
+* `hash(data, salt, progress, cb)`
 	* `data` - [REQUIRED] - the data to be encrypted.
 	* `salt` - [REQUIRED] - the salt to be used to hash the password.
+	* `progress` - a callback to be called during the hash calculation to signify progress
 	* `callback` - [REQUIRED] - a callback to be fired once the data has been encrypted.
 		* `error` - First parameter to the callback detailing any errors.
 		* `result` - Second parameter to the callback providing the encrypted form.
