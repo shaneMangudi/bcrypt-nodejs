@@ -407,11 +407,11 @@ function ekskey(data, key, P, S) {
 		sw = streamtoword(data, offp);
 		offp = sw.offp;
 		lr[0] ^= sw.key;
-		
+
 		sw = streamtoword(data, offp);
 		offp = sw.offp;
 		lr[1] ^= sw.key;
-		
+
 		lr = encipher(lr, 0, P, S);
 		P[i] = lr[0];
 		P[i + 1] = lr[1];
@@ -420,11 +420,11 @@ function ekskey(data, key, P, S) {
 		sw = streamtoword(data, offp);
 		offp = sw.offp;
 		lr[0] ^= sw.key;
-		
+
 		sw = streamtoword(data, offp);
 		offp = sw.offp;
 		lr[1] ^= sw.key;
-		
+
 		lr = encipher(lr, 0, P, S);
 		S[i] = lr[0];
 		S[i + 1] = lr[1];
@@ -445,14 +445,14 @@ function crypt_raw(password, salt, log_rounds, progress) {
 
 	rounds = 1 << log_rounds;
 	one_percent = Math.floor(rounds / 100) + 1;
-	
+
 	var P = P_orig.slice();
 	var S = S_orig.slice();
-	
+
 	ekskey(salt, password, P, S);
 
 	var i = 0;
-	
+
 	while(true) {
 		if(i < rounds){
 			var start = new Date();
@@ -517,12 +517,14 @@ function hashpw(password, salt, progress) {
 	rounds = r1 + r2;
 	real_salt = salt.substring(off + 3, off + 25);
 	password = password + (minor >= 'a' ? "\000" : "");
-	for (var r = 0; r < password.length; r++) {
-		passwordb.push(getByte(password.charAt(r)));
+
+	var buf = new Buffer(password);
+	for (var r = 0; r < buf.length; r++) {
+		passwordb.push(buf[r]);
 	}
 	saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
 	var hashed = crypt_raw(passwordb, saltb, rounds, progress);
-	
+
 	var rs = [];
 	rs.push("$2");
 	if (minor >= 'a')
@@ -534,7 +536,7 @@ function hashpw(password, salt, progress) {
 	rs.push("$");
 	rs.push(encode_base64(saltb, saltb.length));
 	rs.push(encode_base64(hashed, bf_crypt_ciphertext.length * 4 - 1));
-	
+
 	return(rs.join(''));
 };
 
@@ -549,14 +551,14 @@ function gensalt(rounds) {
 		output.push("0");
 	output.push(iteration_count.toString());
 	output.push('$');
-	
+
 	var rand_buf;
 	try {
 		rand_buf = crypto.randomBytes(BCRYPT_SALT_LEN);
 	} catch (ex) {
 		throw ex;
 	}
-	
+
 	output.push(encode_base64(rand_buf, BCRYPT_SALT_LEN));
 	return output.join('');
 };
@@ -640,33 +642,33 @@ function compareSync(data, encrypted) {
 		data - [REQUIRED] - data to compare.
 		encrypted - [REQUIRED] - data to be compared to.
 	*/
-	
+
 	if(typeof data != "string" ||  typeof encrypted != "string") {
 		throw "Incorrect arguments";
 	}
-	
+
 	var encrypted_length = encrypted.length;
-	
+
 	if(encrypted_length != 60) {
 		throw "Not a valid BCrypt hash.";
 	}
-	
+
 	var same = true;
-	var hash_data = hashSync(data, encrypted.substr(0, encrypted_length-31));	
+	var hash_data = hashSync(data, encrypted.substr(0, encrypted_length-31));
 	var hash_data_length = hash_data.length;
-	
+
 	same = hash_data_length == encrypted_length;
-	
+
 	var max_length = (hash_data_length < encrypted_length) ? hash_data_length : encrypted_length;
 
 	// to prevent timing attacks, should check entire string
-	// don't exit after found to be false	
+	// don't exit after found to be false
 	for (var i = 0; i < max_length; ++i) {
 		if (hash_data_length >= i && encrypted_length >= i && hash_data[i] != encrypted[i]) {
 			same = false;
 		}
 	}
-	
+
 	return same;
 }
 
