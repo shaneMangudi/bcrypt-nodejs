@@ -1,6 +1,8 @@
 bcrypt-nodejs
 ===========================================
 
+Warning : A change was made in v0.0.3 to allow encoding of UTF-8 encoded strings. This causes strings encoded in v0.0.2 or earlier to not work in v0.0.3 anymore.
+
 Native JS implementation of BCrypt for Node.
 Has the same functionality as [node.bcrypt.js] expect for a few tiny differences.
 Mainly, it doesn't let you set the seed length for creating the random byte array.
