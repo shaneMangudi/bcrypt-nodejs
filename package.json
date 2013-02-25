@@ -4,9 +4,7 @@
 	"main": "./bCrypt",
 	"author": "Shane Girish (https://github.com/shaneGirish)",
 	"version": "0.0.2",
-	"author": {
-		"name": "Shane Girish",
-		"email": "shaneGirish@gmail.com"
+	"author": "Shane Girish <shaneGirish@gmail.com>"
 	},
 	"repository": {
 		"type": "git",
@@ -16,7 +14,9 @@
 		"url": "https://github.com/shaneGirish/bcrypt-nodejs/issues"
 	},
 	"contributors": [
-		
+		"Alex Murray <> (https://github.com/alexmurray)",
+		"Nicolas Pelletier <> (https://github.com/NicolasPelletier)",
+		"Josh Rogers <> (https://github.com/geekymole)",
 	],
 	"keywords": [
 		"bcrypt",

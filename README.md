@@ -68,7 +68,14 @@ API
 		* `result` - Second parameter to the callback providing whether the data and encrypted forms match [true | false].
 * `getRounds(encrypted)` - return the number of rounds used to encrypt a given hash
 	* `encrypted` - [REQUIRED] - hash from which the number of rounds used should be extracted.
+	
+Contributors
+============
 
+* [Alex Murray][alexmurray]
+* [Nicolas Pelletier][NicolasPelletier]
+* [Josh Rogers][geekymole]	
+	
 Credits
 -------------------------
 I heavily reused code from [javascript-bcrypt]. Though "Clipperz Javascript Crypto Library" was removed and its functionality replaced with "crypto".
