@@ -8,7 +8,7 @@ Mainly, it doesn't let you set the seed length for creating the random byte arra
 I created this version due to a small [problem](https://github.com/ncb000gt/node.bcrypt.js/issues/102) I faced with [node.bcrypt.js].
 Basically, to deploy one of my apps which uses [node.bcrypt.js] on a winx64 platform, I have to force the user to download about 1.6gb of sdks, buildtools and other requirements of which some fail to install ! Microsoft :(
 
-This code is based on [javascript-bcrypt] and uses "crypto" to create random byte arrays.
+This code is based on [javascript-bcrypt] and uses [crypto] (http://nodejs.org/api/crypto.html) to create random byte arrays.
 
 Basic usage:
 -----------
