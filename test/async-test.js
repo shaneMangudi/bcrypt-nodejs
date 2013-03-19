@@ -8,7 +8,7 @@ var compares = 0;
 var salts = [];
 var hashes = [];
 
-describe('Test ASync', function () {
+describe('Test Async', function () {
   this.timeout('16s')
   this.slow('8s')
   var bacon = 'bacon'
@@ -67,16 +67,7 @@ describe('Test ASync', function () {
           veggiesHash2 = reply
           cb()
         })
-      },
-      function (cb) {
-        bCrypt.genSalt(10, function (err, reply) {
-          if (err) { return cb(err) }
-          should.exist(reply)
-          salt2 = reply
-          cb()
-        })
       }
-
     ], function (errs) {
       should.not.exist(errs, 'no errors should occur when generating salts')
       should.exist(salt1, 'salt1 not set')
