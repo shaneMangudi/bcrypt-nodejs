@@ -470,7 +470,7 @@ function crypt_raw(password, salt, log_rounds, progress) {
         	} else {
  	        	for (i = 0; i < 64; i++) {
                 		for (j = 0; j < (clen >> 1); j++) {
-                    			lr = encipher(cdata, j << 1, P, S);
+                    			var lr = encipher(cdata, j << 1, P, S);
                 		}
             		}
 			var ret = [];
@@ -495,7 +495,7 @@ function hashpw(password, salt, progress) {
 	var off = 0;
 
 	if (!progress){
-	        var progress = function() {};
+	        progress = function() {};
 	}
 
 	if (salt.charAt(0) != '$' || salt.charAt(1) != '2')
@@ -523,7 +523,7 @@ function hashpw(password, salt, progress) {
 		passwordb.push(buf[r]);
 	}
 	saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
-	var hashed = crypt_raw(passwordb, saltb, rounds, progress);
+	hashed = crypt_raw(passwordb, saltb, rounds, progress);
 
 	var rs = [];
 	rs.push("$2");
