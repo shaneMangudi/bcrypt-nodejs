@@ -1,6 +1,6 @@
 # bcrypt-nodejs
 ===========================================
-[![build status](https://secure.travis-ci.org/shaneGirish/bcrypt-nodejs)](http://travis-ci.org/shaneGirish/bcrypt-nodejs) [![Dependency Status](https://david-dm.org/shaneGirish/bcrypt-nodejs)](https://david-dm.org/shaneGirish/bcrypt-nodejs)
+[![build status](https://secure.travis-ci.org/shaneGirish/bcrypt-nodejs)](http://travis-ci.org/shaneGirish/bcrypt-nodejs) [![Dependency Status](https://david-dm.org/shaneGirish/bcrypt-nodejs.png)](https://david-dm.org/shaneGirish/bcrypt-nodejs)
 Warning : A change was made in v0.0.3 to allow encoding of UTF-8 encoded strings. This causes strings encoded in v0.0.2 or earlier to not work in v0.0.3 anymore.
 
 Native JS implementation of BCrypt for Node.
