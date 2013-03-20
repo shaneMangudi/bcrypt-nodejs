@@ -9,28 +9,60 @@ Native javascript implementation of BCrypt for Node.
 Has the same functionality as [node.bcrypt.js] except for a few differences. Mainly, it doesn't let you set the seed length for creating the random byte array.
 
 I created this version due to a small [problem](https://github.com/ncb000gt/node.bcrypt.js/issues/102) I faced with [node.bcrypt.js].
-Basically, it proved too difficult to compile using node-gyp in Windows x64 platforms (Win7 and Win8, in my case).
+Basically, it proved too difficult to compile using [node-gyp] in Windows x64 platforms (Win7 and Win8, in my case).
 
 This code is based on [javascript-bcrypt] and uses [crypto] to create random byte arrays.
 
 ##Warnings
 ### UTF8 strings
 Support for UTF8 strings was only added in v0.0.3. This also means that strings encoded by v0.0.2 and below are not compatible with v0.0.3 and above.
-It is strongly recommended that the use of any version below v0.0.3 be discontinued for this very reason. 
 ### Asynchronous Functions
 The asynchronous functions use [process.nextTick()]. They don't actually run in separate threads and thus will block the node process when they do execute.
 There are 2 ways to do proper asynchronous call in node:
 #### 1. Multiple threads in one process
-[webworker-threads] (https://github.com/audreyt/node-webworker-threads)
-Requires compilation with node-gyp.
-#### 2. A pool of processes
-Each node instance needs about 10mb extra. Confirm ?
-[process.fork()] (http://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options)
-Native.
-or
-[compute-cluster] (https://github.com/lloyd/node-compute-cluster)
-Doesn't need compilation. Slightly outdated. Needs a revamp and support for events.
+[webworker-threads] implements WebWorker API and more.
+```javascript
+var WebWorker = require('webworker-threads').Worker;
 
+var worker = new WebWorker(function() {
+    this.bcrypt = require('bcrypt-nodejs');
+    this.onmessage = function(event) {
+        postMessage(this.bcrypt.hashSync(event.data));
+        self.close();
+    };
+});
+
+worker.onmessage = function(event) {
+    console.log("bCrypt Hash : "  + event.data);
+}
+
+worker.postMessage('bacon');
+```
+The above code won't block the event loop like [process.nextTick()], because for each request, the worker will run in parallel in a separate background thread. The disadvantage to this method is that [webworker-threads] require compilation with [node-gyp]. If this is an option, please consider using [node.bcrypt.js] instead of this module as it implements threads by itself and this means your project won't need another dependancy.
+
+#### 2. A pool of processes
+Whole new instances of V8 can be started in parallel to your main application to compute intensive tasks using [process.fork()].
+Assume at least 30ms startup and 10mb memory for each new Node. That is, you cannot create many thousands of them and to be significantly efficient, you need to have a pool of processes ready to work at any given time. [process.fork()] is native, so it needs no compilation.
+```javascript
+var child = require('child_process').fork(__dirname + '/worker.js');
+
+child.on('message', function(message) {
+    console.log("bCrypt Hash : "  + message.data);
+});
+
+child.send({ data: 'bacon' });
+```
+The child script `worker.js` would look like this :
+```javascript
+var bCrypt = require('bcrypt-nodejs');
+
+process.on('message', function(message) {
+    process.send({ data: bcrypt.hashSync(message.data) });
+});
+
+```
+The above example only shows how to start one child process and get the result. For starting and maintaining a pool of child processes you could use [compute-cluster].
+*I just found that the last commit in [compute-cluster] was 2 months ago. There are some bugs to squash and it seriously needs support of events.*
 
 ## Basic usage:
 Synchronous
@@ -44,25 +76,22 @@ bcrypt.compareSync("veggies", hash); // false
 Asynchronous
 ```javascript
 bcrypt.hash("bacon", null, null, function(err, hash) {
-    if(err) {
-        // Something went wrong.
-    }
+    if(err) { /* Something went wrong. */ }
+
     // Store hash in your password DB.
 });
 
 // Load hash from your password DB.
 bcrypt.compare("bacon", hash, function(err, result) {
-    if(err) {
-        // Something went wrong.
-    }
-    // result === true
+    if(err) { /* Something went wrong. */ }
+
+    console.log(result); // true
 });
 
 bcrypt.compare("veggies", hash, function(err, result) {
-    if(err) {
-        // Something went wrong.
-    }
-    // result = false
+    if(err) { /* Something went wrong. */ }
+
+    console.log(result); // false
 });
 ```
 
@@ -108,10 +137,14 @@ Though you can use your custom salt and there is no need for salts to be persist
 ## Credits
 I heavily reused code from [javascript-bcrypt]. Though "Clipperz Javascript Crypto Library" was removed and its functionality replaced with [crypto].
 
-[crypto]:(http://nodejs.org/api/crypto.html)
+[crypto]:http://nodejs.org/api/crypto.html
 [node.bcrypt.js]:https://github.com/ncb000gt/node.bcrypt.js.git
 [javascript-bcrypt]:http://code.google.com/p/javascript-bcrypt/
-[process.nextTick()]:(http://nodejs.org/api/process.html#process_process_nexttick_callback)
+[process.nextTick()]:http://nodejs.org/api/process.html#process_process_nexttick_callback
+[node-gyp]:https://github.com/TooTallNate/node-gyp
+[webworker-threads]:https://github.com/audreyt/node-webworker-threads
+[process.fork()]:http://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options
+[compute-cluster]:https://github.com/lloyd/node-compute-cluster
 
 [alexmurray]:https://github.com/alexmurray
 [NicolasPelletier]:https://github.com/NicolasPelletier
