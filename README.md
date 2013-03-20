@@ -4,20 +4,37 @@
 [![Dependency Status](https://david-dm.org/shaneGirish/bcrypt-nodejs.png)](https://david-dm.org/shaneGirish/bcrypt-nodejs)
 
 
-Warning : A change was made in v0.0.3 to allow encoding of UTF-8 encoded strings. This causes strings encoded in v0.0.2 or earlier to not work in v0.0.3 anymore.
+Native javascript implementation of BCrypt for Node.
 
-Native JS implementation of BCrypt for Node.
-Has the same functionality as [node.bcrypt.js] expect for a few tiny differences.
-Mainly, it doesn't let you set the seed length for creating the random byte array.
+Has the same functionality as [node.bcrypt.js] except for a few differences. Mainly, it doesn't let you set the seed length for creating the random byte array.
 
 I created this version due to a small [problem](https://github.com/ncb000gt/node.bcrypt.js/issues/102) I faced with [node.bcrypt.js].
-Basically, to deploy one of my apps which uses [node.bcrypt.js] on a winx64 platform, I have to force the user to download about 1.6gb of sdks, buildtools and other requirements of which some fail to install ! Microsoft :(
+Basically, it proved too difficult to compile using node-gyp in Windows x64 platforms (Win7 and Win8, in my case).
 
 This code is based on [javascript-bcrypt] and uses [crypto] to create random byte arrays.
 
+##Warnings
+### UTF8 strings
+Support for UTF8 strings was only added in v0.0.3. This also means that strings encoded by v0.0.2 and below are not compatible with v0.0.3 and above.
+It is strongly recommended that the use of any version below v0.0.3 be discontinued for this very reason. 
+### Asynchronous Functions
+The asynchronous functions use [process.nextTick()]. They don't actually run in separate threads and thus will block the node process when they do execute.
+There are 2 ways to do proper asynchronous call in node:
+#### 1. Multiple threads in one process
+[webworker-threads] (https://github.com/audreyt/node-webworker-threads)
+Requires compilation with node-gyp.
+#### 2. A pool of processes
+Each node instance needs about 10mb extra. Confirm ?
+[process.fork()] (http://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options)
+Native.
+or
+[compute-cluster] (https://github.com/lloyd/node-compute-cluster)
+Doesn't need compilation. Slightly outdated. Needs a revamp and support for events.
+
+
 ## Basic usage:
 Synchronous
-```
+```javascript
 var hash = bcrypt.hashSync("bacon");
 
 bcrypt.compareSync("bacon", hash); // true
@@ -25,17 +42,27 @@ bcrypt.compareSync("veggies", hash); // false
 ```
 
 Asynchronous
-```
+```javascript
 bcrypt.hash("bacon", null, null, function(err, hash) {
-  // Store hash in your password DB.
+    if(err) {
+        // Something went wrong.
+    }
+    // Store hash in your password DB.
 });
 
 // Load hash from your password DB.
-bcrypt.compare("bacon", hash, function(err, res) {
-    // res == true
+bcrypt.compare("bacon", hash, function(err, result) {
+    if(err) {
+        // Something went wrong.
+    }
+    // result === true
 });
-bcrypt.compare("veggies", hash, function(err, res) {
-    // res = false
+
+bcrypt.compare("veggies", hash, function(err, result) {
+    if(err) {
+        // Something went wrong.
+    }
+    // result = false
 });
 ```
 
@@ -84,6 +111,7 @@ I heavily reused code from [javascript-bcrypt]. Though "Clipperz Javascript Cryp
 [crypto]:(http://nodejs.org/api/crypto.html)
 [node.bcrypt.js]:https://github.com/ncb000gt/node.bcrypt.js.git
 [javascript-bcrypt]:http://code.google.com/p/javascript-bcrypt/
+[process.nextTick()]:(http://nodejs.org/api/process.html#process_process_nexttick_callback)
 
 [alexmurray]:https://github.com/alexmurray
 [NicolasPelletier]:https://github.com/NicolasPelletier
