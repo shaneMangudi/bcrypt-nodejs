@@ -1,15 +1,15 @@
 var crypto = require("crypto");
 
 var BCRYPT_SALT_LEN = 16;
-
 var GENSALT_DEFAULT_LOG2_ROUNDS = 10;
 var BLOWFISH_NUM_ROUNDS = 16;
-
 var MAX_EXECUTION_TIME = 100;
+
 var P_orig = [0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822,
 		0x299f31d0, 0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377,
 		0xbe5466cf, 0x34e90c6c, 0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5,
 		0xb5470917, 0x9216d5d9, 0x8979fb1b];
+
 var S_orig = [0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed,
 		0x6a267e96, 0xba7c9045, 0xf12c7f99, 0x24a19947, 0xb3916cf7,
 		0x0801f2e2, 0x858efc16, 0x636920d8, 0x71574e69, 0xa458fea3,
@@ -215,8 +215,10 @@ var S_orig = [0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7, 0xb8e1afed,
 		0x7aaaf9b0, 0x4cf9aa7e, 0x1948c25c, 0x02fb8a8c, 0x01c36ae4,
 		0xd6ebe1f9, 0x90d4f869, 0xa65cdea0, 0x3f09252d, 0xc208e69f,
 		0xb74e6132, 0xce77e25b, 0x578fdfe3, 0x3ac372e6];
+
 var bf_crypt_ciphertext = [0x4f727068, 0x65616e42, 0x65686f6c, 0x64657253,
 		0x63727944, 0x6f756274];
+
 var base64_code = ['.', '/', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
 		'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
 		'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
@@ -233,18 +235,8 @@ var index_64 = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 		49, 50, 51, 52, 53, -1, -1, -1, -1, -1];
 
 function getByte(c) {
-	var ret = 0;
-	try {
-		var b = c.charCodeAt(0);
-	} catch (err) {
-		b = c;
-	}
-	if (b > 127) {
-		return -128 + (b % 128);
-	} else {
-		return b;
-	}
-};
+    return typeof c == 'string' ? c.charCodeAt(0) : c >>> 0;
+}
 
 function encode_base64(d, len) {
 	var off = 0;
@@ -252,7 +244,7 @@ function encode_base64(d, len) {
 	var c1;
 	var c2;
 	if (len <= 0 || len > d.length)
-		throw "Invalid len";
+		throw(new Error("Invalid 'len': "+len));
 	while (off < len) {
 		c1 = d[off++] & 0xff;
 		rs.push(base64_code[(c1 >> 2) & 0x3f]);
@@ -275,7 +267,7 @@ function encode_base64(d, len) {
 		rs.push(base64_code[c2 & 0x3f]);
 	}
 	return rs.join('');
-};
+}
 
 function char64(x) {
 	var code = x.charCodeAt(0);
@@ -283,7 +275,7 @@ function char64(x) {
 		return -1;
 	}
 	return index_64[code];
-};
+}
 
 function decode_base64(s, maxolen) {
 	var off = 0;
@@ -325,7 +317,7 @@ function decode_base64(s, maxolen) {
 		ret.push(getByte(rs[off]));
 	}
 	return ret;
-};
+}
 
 function encipher(lr, off, P, S) {
 	var i;
@@ -352,7 +344,7 @@ function encipher(lr, off, P, S) {
 	lr[off] = r ^ P[BLOWFISH_NUM_ROUNDS + 1];
 	lr[off + 1] = l;
 	return lr;
-};
+}
 
 function streamtoword(data, offp) {
 	var i;
@@ -362,7 +354,7 @@ function streamtoword(data, offp) {
 		offp = (offp + 1) % data.length;
 	}
 	return {key:word, offp:offp};
-};
+}
 
 function key(key, P, S) {
 	var i;
@@ -387,7 +379,7 @@ function key(key, P, S) {
 		S[i] = lr[0];
 		S[i + 1] = lr[1];
 	}
-};
+}
 
 function ekskey(data, key, P, S) {
 	var i;
@@ -429,9 +421,14 @@ function ekskey(data, key, P, S) {
 		S[i] = lr[0];
 		S[i + 1] = lr[1];
 	}
-};
+}
 
-function crypt_raw(password, salt, log_rounds, progress) {
+/**
+ * @returns {*|undefined}
+ */
+function crypt_raw(password, salt, log_rounds, callback, progress) {
+    // NOTE (dcode): This is truly async if, and only if, a callback is provided. Otherwise it just returns the value.
+    
 	var rounds;
 	var j;
 	var cdata = bf_crypt_ciphertext.slice();
@@ -453,50 +450,70 @@ function crypt_raw(password, salt, log_rounds, progress) {
 
 	var i = 0;
 
-	while(true) {
-		if(i < rounds){
-			var start = new Date();
-			for (; i < rounds;) {
-				i = i + 1;
-				key(password, P, S);
-				key(salt, P, S);
-		                if(i % one_percent == 0){
-			        	progress();
-                		}
-		                if((new Date() - start) > MAX_EXECUTION_TIME){
-                    			break;
-		                }
-            		}
-        	} else {
- 	        	for (i = 0; i < 64; i++) {
-                		for (j = 0; j < (clen >> 1); j++) {
-                    			var lr = encipher(cdata, j << 1, P, S);
-                		}
-            		}
-			var ret = [];
-		        for (i = 0; i < clen; i++) {
-                		ret.push(getByte((cdata[i] >> 24) & 0xff));
-                		ret.push(getByte((cdata[i] >> 16) & 0xff));
-                		ret.push(getByte((cdata[i] >> 8) & 0xff));
-                		ret.push(getByte(cdata[i] & 0xff));
-            		}
-            		return(ret);
-        	}
-	}
-};
+    /**
+     * @returns {Array|undefined}
+     */
+    function next() {
+        if(i < rounds){
+            var start = new Date();
+            for (; i < rounds;) {
+                i = i + 1;
+                key(password, P, S);
+                key(salt, P, S);
+                if(i % one_percent == 0){
+                    if (progress) progress();
+                }
+                if((new Date() - start) > MAX_EXECUTION_TIME){
+                    break;
+                }
+            }
+        } else {
+            for (i = 0; i < 64; i++) {
+                for (j = 0; j < (clen >> 1); j++) {
+                    encipher(cdata, j << 1, P, S);
+                }
+            }
+            var ret = [];
+            for (i = 0; i < clen; i++) {
+                ret.push(getByte((cdata[i] >> 24) & 0xff));
+                ret.push(getByte((cdata[i] >> 16) & 0xff));
+                ret.push(getByte((cdata[i] >> 8) & 0xff));
+                ret.push(getByte(cdata[i] & 0xff));
+            }
+            if (callback) {
+                callback(null, ret);
+                return;
+            } else {
+                return ret;
+            }
+        }
+        if (callback) {
+            process.nextTick(next);
+        }
+    }
+    
+    var res;
+    if (typeof callback != 'undefined') {
+        next();
+    } else {
+        while (typeof (res = next()) == 'undefined') {
+        }
+        return res;
+    }
+}
 
-function hashpw(password, salt, progress) {
+/**
+ * @returns {string|undefined}
+ */
+function hashpw(password, salt, callback) {
+    // NODE (dcode): This is async if, and only if, callback is provided. Else it just returns the result.
+    
 	var real_salt;
 	var passwordb = [];
 	var saltb = [];
-	var hashed = [];
 	var minor = String.fromCharCode(0);
 	var rounds = 0;
 	var off = 0;
-
-	if (!progress){
-	        progress = function() {};
-	}
 
 	if (salt.charAt(0) != '$' || salt.charAt(1) != '2')
 		throw "Invalid salt version";
@@ -523,22 +540,35 @@ function hashpw(password, salt, progress) {
 		passwordb.push(buf[r]);
 	}
 	saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
-	hashed = crypt_raw(passwordb, saltb, rounds, progress);
+    
+    function finish(hashed) {
+        var rs = [];
+        rs.push("$2");
+        if (minor >= 'a')
+            rs.push(minor);
+        rs.push("$");
+        if (rounds < 10)
+            rs.push("0");
+        rs.push(rounds.toString());
+        rs.push("$");
+        rs.push(encode_base64(saltb, saltb.length));
+        rs.push(encode_base64(hashed, bf_crypt_ciphertext.length * 4 - 1));
 
-	var rs = [];
-	rs.push("$2");
-	if (minor >= 'a')
-		rs.push(minor);
-	rs.push("$");
-	if (rounds < 10)
-		rs.push("0");
-	rs.push(rounds.toString());
-	rs.push("$");
-	rs.push(encode_base64(saltb, saltb.length));
-	rs.push(encode_base64(hashed, bf_crypt_ciphertext.length * 4 - 1));
-
-	return(rs.join(''));
-};
+        return(rs.join(''));
+    }
+    
+    if (typeof callback == 'undefined') {
+        return finish(crypt_raw(passwordb, saltb, rounds));
+    } else {
+        crypt_raw(passwordb, saltb, rounds, function(err, hashed) {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, finish(hashed));
+            }
+        });
+    }
+}
 
 function gensalt(rounds) {
 	var iteration_count = rounds;
@@ -561,7 +591,7 @@ function gensalt(rounds) {
 
 	output.push(encode_base64(rand_buf, BCRYPT_SALT_LEN));
 	return output.join('');
-};
+}
 
 function genSaltSync(rounds) {
 	/*
@@ -582,8 +612,8 @@ function genSalt(rounds, callback) {
 			error - First parameter to the callback detailing any errors.
 			salt - Second parameter to the callback providing the generated salt.
 	*/
-	if(!callback) {
-		throw "No callback function was given."
+	if(!callback || typeof callback != 'function') {
+		throw(new Error("Missing 'callback'"));
 	}
 	process.nextTick(function() {
 		var result = null;
@@ -597,7 +627,7 @@ function genSalt(rounds, callback) {
 	});
 }
 
-function hashSync(data, salt, progress) {
+function hashSync(data, salt) {
 	/*
 		data - [REQUIRED] - the data to be encrypted.
 		salt - [REQUIRED] - the salt to be used in encryption.
@@ -605,7 +635,7 @@ function hashSync(data, salt, progress) {
 	if(!salt) {
 		salt = genSaltSync();
 	}
-	return hashpw(data, salt, progress);
+	return hashpw(data, salt);
 }
 
 function hash(data, salt, progress, callback) {
@@ -617,19 +647,17 @@ function hash(data, salt, progress, callback) {
 			error - First parameter to the callback detailing any errors.
 			encrypted - Second parameter to the callback providing the encrypted form.
 	*/
-	if(!callback) {
-		throw "No callback function was given."
+    if (typeof callback == 'undefined') {
+        callback = progress;
+        progress = null;
+    }
+	if(typeof callback != 'function') {
+		throw(new Error("Missing 'callback'"));
 	}
-	process.nextTick(function() {
-		var result = null;
-		var error = null;
-		try {
-			result = hashSync(data, salt, progress)
-		} catch(err) {
-			error = err;
-		}
-		callback(error, result);
-	});
+    if(!salt) {
+        salt = genSaltSync();
+    }
+    return hashpw(data, salt, callback);
 }
 
 function compareSync(data, encrypted) {
@@ -648,7 +676,7 @@ function compareSync(data, encrypted) {
 		throw "Not a valid BCrypt hash.";
 	}
 
-	var same = true;
+	var same;
 	var hash_data = hashSync(data, encrypted.substr(0, encrypted_length-31));
 	var hash_data_length = hash_data.length;
 
