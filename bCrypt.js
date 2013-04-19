@@ -283,7 +283,7 @@ function decode_base64(s, maxolen) {
 	var olen = 0;
 	var rs = [];
 	var c1, c2, c3, c4, o;
-	if (maxolen <= 0) throw "Invalid maxolen";
+	if (maxolen <= 0) throw(new Error("Invalid maxolen: "+maxolen));
 	while (off < slen - 1 && olen < maxolen) {
 		c1 = char64(s.charAt(off++));
 		c2 = char64(s.charAt(off++));
@@ -436,9 +436,9 @@ function crypt_raw(password, salt, log_rounds, callback, progress) {
 	var one_percent;
 
 	if (log_rounds < 4 || log_rounds > 31)
-		throw "Bad number of rounds";
+		throw(new Error("Bad number of rounds: "+log_rounds));
 	if (salt.length != BCRYPT_SALT_LEN)
-		throw "Bad salt length";
+		throw(new Error("Bad salt length: "+salt.length+" != "+BCRYPT_SALT_LEN));
 
 	rounds = 1 << log_rounds;
 	one_percent = Math.floor(rounds / 100) + 1;
@@ -516,19 +516,19 @@ function hashpw(password, salt, callback) {
 	var off = 0;
 
 	if (salt.charAt(0) != '$' || salt.charAt(1) != '2')
-		throw "Invalid salt version";
+		throw(new Error("Invalid salt version: "+salt.substring(0,2)));
 	if (salt.charAt(2) == '$')
 		off = 3;
 	else {
 		minor = salt.charAt(2);
 		if (minor != 'a' || salt.charAt(3) != '$')
-			throw "Invalid salt revision";
+			throw(new Error("Invalid salt revision: "+salt.substring(2,4)));
 		off = 4;
 	}
 
 	// Extract number of rounds
 	if (salt.charAt(off + 2) > '$')
-		throw "Missing salt rounds";
+		throw(new Error("Missing salt rounds"));
 	var r1 = parseInt(salt.substring(off, off + 1)) * 10;
 	var r2 = parseInt(salt.substring(off + 1, off + 2));
 	rounds = r1 + r2;
@@ -586,7 +586,7 @@ function gensalt(rounds) {
 	try {
 		rand_buf = crypto.randomBytes(BCRYPT_SALT_LEN);
 	} catch (ex) {
-		throw ex;
+		throw(ex);
 	}
 
 	output.push(encode_base64(rand_buf, BCRYPT_SALT_LEN));
@@ -667,13 +667,13 @@ function compareSync(data, encrypted) {
 	*/
 
 	if(typeof data != "string" ||  typeof encrypted != "string") {
-		throw "Incorrect arguments";
+		throw(new Error("Invalid arguments"));
 	}
 
 	var encrypted_length = encrypted.length;
 
 	if(encrypted_length != 60) {
-		throw "Not a valid BCrypt hash.";
+		throw(new Error("Not a valid hash"));
 	}
 
 	var same;
@@ -704,7 +704,7 @@ function compare(data, encrypted, callback) {
 			same - Second parameter to the callback providing whether the data and encrypted forms match [true | false].
 	*/
 	if(!callback) {
-		throw "No callback function was given."
+		throw(new Error("Missing 'callback'"));
 	}
 	process.nextTick(function() {
 		var result = null;
@@ -721,7 +721,7 @@ function compare(data, encrypted, callback) {
 function getRounds(encrypted) {
 	//encrypted - [REQUIRED] - hash from which the number of rounds used should be extracted.
 	if(typeof encrypted != "string") {
-		throw "Incorrect arguments";
+		throw(new Error("Illegal type of 'encrypted': "+(typeof encrypted)));
 	}
 	return Number(encrypted.split("$")[2]);
 }
