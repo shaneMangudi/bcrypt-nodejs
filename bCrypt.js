@@ -621,6 +621,7 @@ function hash(data, salt, progress, callback) {
 		throw "No callback function was given."
 	} else if (progress && !callback) {
 		callback = progress;
+		progress = undefined;
 	}
 	process.nextTick(function() {
 		var result = null;
