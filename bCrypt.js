@@ -645,7 +645,7 @@ function compareSync(data, encrypted) {
 	var encrypted_length = encrypted.length;
 
 	if(encrypted_length != 60) {
-		throw "Not a valid BCrypt hash.";
+        return false;
 	}
 
 	var same = true;
