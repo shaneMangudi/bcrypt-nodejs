@@ -8,7 +8,7 @@ describe('Test Sync', function () {
 
   var salt1, salt2
   var secret = "super secret"
-  var hash1, hash2, hash3, hash4, hash5, hash6, hash7, hash8, hash9, hash0
+  var hash1, hash2, hash3, hash4, hash5, hash6, hash7, hash8, hash9, hash0, invalidHash
 
   var pw1, pw2, pw3, pw4, hash_pw1, hash_pw2, hash_pw3, hash_pw4
   before(function () {
@@ -28,6 +28,8 @@ describe('Test Sync', function () {
     hash8 = bCrypt.hashSync('supersecret', salt2, null)
     hash9 = bCrypt.hashSync('super secret', null, null)
     hash0 = bCrypt.hashSync('super secret', null, null)
+
+    invalidHash = 'some invalid hash that does not equal sixty bytes in length'
 
     pw1 = '\u6e2f'  // http://www.fileformat.info/info/unicode/char/6e2f/index.htm
     pw2 = '港' // Character 0x6e2f same as pw1.
@@ -94,5 +96,8 @@ describe('Test Sync', function () {
   })
   it('hash_pw3 should be equal hash_pw4', function () {
     hash_pw3.should.eql(hash_pw3, 'hash_pw3 should equal hash_pw4')
+  })
+  it('invalid hash should return false and not throw', function() {
+      bCrypt.compareSync('supersecret', invalidHash).should.be.false
   })
 })

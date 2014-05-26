@@ -13,6 +13,8 @@ describe('Test Async', function () {
   this.slow('8s')
   var bacon = 'bacon'
   var veggies = 'veggies'
+  var soyBaconHash = 'some invalid hash that does not equal sixty bytes in length'
+
   var salt1, salt2, baconHash1, baconHash2, veggiesHash1, veggiesHash2
   before(function (done) {
     async.parallel([
@@ -140,4 +142,12 @@ describe('Test Async', function () {
       done()
     })
   })
+  it('soyBaconHash is just wrong and should return false and not throw', function(done) {
+    bCrypt.compare(veggies, soyBaconHash, function (err, matches) {
+      should.not.exist(err)
+      assert.ok(!matches, 'compare should return false')
+      done()
+    })
+  })
+
 })
