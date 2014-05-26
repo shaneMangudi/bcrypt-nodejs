@@ -3,7 +3,7 @@
     "description": "A native JS bcrypt library for NodeJS.",
     "main": "./bCrypt",
     "author": "Shane Girish <shaneGirish@gmail.com> (https://github.com/shaneGirish)",
-    "version": "0.0.3",
+    "version": "0.1.0",
     "repository": {
         "type": "git",
         "url": "https://github.com/shaneGirish/bcrypt-nodejs.git"
@@ -21,7 +21,8 @@
         "Alex Murray <> (https://github.com/alexmurray)",
         "Nicolas Pelletier <> (https://github.com/NicolasPelletier)",
         "Josh Rogers <> (https://github.com/geekymole)",
-        "Noah Isaacson <noah@nisaacson.com> (https://github.com/nisaacson)"
+        "Noah Isaacson <noah@nisaacson.com> (https://github.com/nisaacson)",
+        "Joshua Ball <joshua.g.s.ball@gmail.com> (https://github.com/joshball)"
     ],
     "keywords": [
         "bcrypt",
