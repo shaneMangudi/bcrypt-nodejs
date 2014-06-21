@@ -516,7 +516,7 @@ function hashpw(password, salt, progress) {
 	var r2 = parseInt(salt.substring(off + 1, off + 2));
 	rounds = r1 + r2;
 	real_salt = salt.substring(off + 3, off + 25);
-	password = password + (minor >= 'a' ? "\000" : "");
+	password = password + (minor >= 'a' ? "\x00" : "");
 
 	var buf = new Buffer(password);
 	for (var r = 0; r < buf.length; r++) {
