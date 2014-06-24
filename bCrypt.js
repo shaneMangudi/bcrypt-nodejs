@@ -617,9 +617,10 @@ function hash(data, salt, progress, callback) {
 			error - First parameter to the callback detailing any errors.
 			encrypted - Second parameter to the callback providing the encrypted form.
 	*/
-	if(!callback) {
-		throw "No callback function was given."
-	}
+    if(typeof callback == 'undefined') {
+        callback = progress;
+        progress = null;
+    }
 	process.nextTick(function() {
 		var result = null;
 		var error = null;
