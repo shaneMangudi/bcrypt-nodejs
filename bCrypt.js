@@ -504,7 +504,7 @@ function hashpw(password, salt, progress) {
 		off = 3;
 	else {
 		minor = salt.charAt(2);
-		if (minor != 'a' || salt.charAt(3) != '$')
+		if ((minor != 'y' && minor != 'a') || salt.charAt(3) != '$')
 			throw "Invalid salt revision";
 		off = 4;
 	}
