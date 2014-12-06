@@ -617,6 +617,9 @@ function hash(data, salt, progress, callback) {
 			error - First parameter to the callback detailing any errors.
 			encrypted - Second parameter to the callback providing the encrypted form.
 	*/
+	
+	var callback = (arguments.length === 3) ? progress : callback;
+	
 	if(!callback) {
 		throw "No callback function was given."
 	}
