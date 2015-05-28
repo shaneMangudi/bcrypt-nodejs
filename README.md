@@ -1,5 +1,7 @@
 # bcrypt-nodejs
 ===========================================
+
+[![Join the chat at https://gitter.im/shaneGirish/bcrypt-nodejs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/shaneGirish/bcrypt-nodejs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://secure.travis-ci.org/shaneGirish/bcrypt-nodejs.png)](http://travis-ci.org/shaneGirish/bcrypt-nodejs)
 [![Dependency Status](https://david-dm.org/shaneGirish/bcrypt-nodejs.png)](https://david-dm.org/shaneGirish/bcrypt-nodejs)
 
