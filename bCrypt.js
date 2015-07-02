@@ -582,6 +582,14 @@ function genSalt(rounds, callback) {
 			error - First parameter to the callback detailing any errors.
 			salt - Second parameter to the callback providing the generated salt.
 	*/
+	/**
+	 * [if only a single argument is passed(i.e. callback)]
+	 * [set callback to that argument, and rounds to default]
+	 */
+	if (arguments.length === 1) {
+		callback = arguments[0];
+		rounds = GENSALT_DEFAULT_LOG2_ROUNDS;
+	}
 	if(!callback) {
 		throw "No callback function was given."
 	}
@@ -589,7 +597,7 @@ function genSalt(rounds, callback) {
 		var result = null;
 		var error = null;
 		try {
-			result = genSaltSync(rounds)
+			result = genSaltSync(rounds);
 		} catch(err) {
 			error = err;
 		}
