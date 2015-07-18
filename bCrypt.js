@@ -602,6 +602,9 @@ function hashSync(data, salt, progress) {
 		data - [REQUIRED] - the data to be encrypted.
 		salt - [REQUIRED] - the salt to be used in encryption.
 	*/
+	if (salt && !isNaN(salt)) {
+		salt = genSaltSync(salt);
+	}
 	if(!salt) {
 		salt = genSaltSync();
 	}

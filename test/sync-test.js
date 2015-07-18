@@ -100,4 +100,11 @@ describe('Test Sync', function () {
   it('invalid hash should return false and not throw', function() {
       bCrypt.compareSync('supersecret', invalidHash).should.be.false
   })
+
+  it('should use specified number of rounds', function () {
+    var PASSWORD = 'super secret'
+    var hash = bCrypt.hashSync(PASSWORD, 12)
+    assert.ok(bCrypt.compareSync(PASSWORD, hash), 'compareSync should return true')
+  })
+
 })
