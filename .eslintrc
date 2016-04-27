@@ -1,0 +1,71 @@
+{
+  "rules": {
+    "accessor-pairs": [2, { "getWithoutSet": true }],
+    "array-bracket-spacing": 0,
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
+    "camelcase": 0,
+    "comma-spacing": [2, {"before": false, "after": true}],
+    "comma-style": [2, "last"],
+    "computed-property-spacing": 0,
+
+    // This is different than SC. This rule below follows Google Closure rule. Feel
+    // free to put 0 back to be compatible with SC code rules.
+    "dot-location": 2,
+    "dot-notation": 0,
+    "indent": [2, 2, { "SwitchCase": 1, "VariableDeclarator": 2 }],
+    "key-spacing": [2, {"beforeColon": false, "afterColon": true, "mode": "minimum"}],
+    "max-nested-callbacks": [2, {"maximum": 10}],
+    "max-len": [2, 120, 2],
+    "max-statements-per-line": 0,
+
+    // If we 'return' in the if(), there is no point in having an 'else'. If is bugs you, put it back to 0.
+    "no-else-return": 0,
+    "no-implicit-coercion": [2, {"boolean": false, "number": true, "string": false}],
+    "no-inline-comments": 0,
+    "no-lonely-if": 0,
+    "no-loop-func": 0,
+    "no-magic-numbers": 0,
+    "no-mixed-requires": 0,
+    "no-multiple-empty-lines": [2, {"max": 100, "maxEOF": 1}],
+    "no-multi-spaces": 0,
+    "no-negated-condition": 0,
+
+    // Ternary operator should be simple and it becomes obfuscated when we nest them
+    // together. If is bugs you, put it back to 0.
+    "no-nested-ternary": 1,
+    "no-redeclare": [2, {"builtinGlobals": true}],
+    "no-unused-vars": [2, { "args": "none", "vars": "all" }],
+    "no-use-before-define": [2, "nofunc"],
+    "no-useless-concat": 0,
+    "no-warning-comments": 0,
+    "object-curly-spacing": 0,
+    "one-var": 0,
+    "operator-assignment": 0,
+    "padded-blocks": 0,
+    "quote-props": [2, "as-needed", { "keywords": true, "unnecessary": false }],
+    "require-jsdoc": [2, { "require": { "FunctionDeclaration": true, "MethodDefinition": true, "ClassDeclaration": true } }],
+    "semi-spacing": [2, {"before": false, "after": true}],
+    "space-in-parens": 0,
+    "spaced-comment": [2, "always", {"exceptions": ["-","*","=","/"]}],
+    "wrap-iife": [2, "inside"]
+  },
+  "env": {
+    "browser": true
+  },
+  "extends": "google",
+  "globals": {
+    "include": true,
+    "exportModule": true,
+    "__dirname": true,
+    "require": true,
+    "dcodeIO": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "before": true,
+    "after": true,
+    "afterEach": true,
+    "beforeEach": true,
+    "callPhantom": true
+  }
+}

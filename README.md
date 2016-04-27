@@ -1,6 +1,8 @@
 bcrypt-nodejs
 ===========================================
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/44f8664856324f9aae4e2bcb7954cf75)](https://www.codacy.com/app/nicolas-pelletier/bcrypt-nodejs?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NicolasPelletier/bcrypt-nodejs&amp;utm_campaign=Badge_Grade)
+
 Native JS implementation of BCrypt for Node.
 Has the same functionality as [node.bcrypt.js] expect for a few tiny differences.
 Mainly, it doesn't let you set the seed length for creating the random byte array.

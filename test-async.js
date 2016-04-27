@@ -8,7 +8,7 @@ console.log("\n\n Salts \n");
 bCrypt.genSalt(8, saltCallback);
 bCrypt.genSalt(10, saltCallback);
 
-function saltCallback(error, result) {
+function saltCallback(err or, result) {
 	if(!error) {
 		console.log(result);
 	} else {
@@ -21,7 +21,7 @@ function saltCallback(error, result) {
 	}
 }
 
-function createHash(salt) {
+function create Hash(salt) {
 	bCrypt.hash("bacon", salt, null, hashCallback);
 	bCrypt.hash("bacon", salt, null, hashCallback);
 }
