@@ -233,7 +233,7 @@ var index_64 = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 		49, 50, 51, 52, 53, -1, -1, -1, -1, -1];
 
 function getByte(c) {
-	var b = c && c.length && c.charCodeAt ? c.charCodeAt(0) : c;
+	var b = c.length && c.charCodeAt ? c.charCodeAt(0) : c;
 	if (b > 127) {
 		return -128 + (b % 128);
 	} else {
