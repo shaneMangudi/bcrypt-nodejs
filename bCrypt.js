@@ -234,10 +234,15 @@ var index_64 = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 
 function getByte(c) {
 	var ret = 0;
-	try {
-		var b = c.charCodeAt(0);
-	} catch (err) {
+	var b;
+	if(!c.charCodeAt) {
 		b = c;
+	} else {
+	    try {
+		b = c.charCodeAt(0);
+    	    } catch (err) {
+		b = c;
+	    }
 	}
 	if (b > 127) {
 		return -128 + (b % 128);
