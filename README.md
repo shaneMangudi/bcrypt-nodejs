@@ -18,6 +18,13 @@ Basically, to deploy one of my apps which uses [node.bcrypt.js] on a winx64 plat
 This code is based on [javascript-bcrypt] and uses [crypto] to create random byte arrays.
 
 ## Basic usage:
+
+Installing the Package
+
+`npm install bcrypt-nodejs`
+or
+`yarn add bcrypt-nodejs`
+
 Synchronous
 ```
 var hash = bcrypt.hashSync("bacon");
