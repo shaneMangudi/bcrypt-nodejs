@@ -1,3 +1,8 @@
+## Note: This project is not actively maintained
+
+If you are looking for a javscript-only bcrypt implementation we recommend you use [bcrypt.js](https://github.com/dcodeIO/bcrypt.js), which is based on bcrypt-nodejs.
+
+
 # bcrypt-nodejs
 ===========================================
 
