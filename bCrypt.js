@@ -248,33 +248,33 @@ function getByte(c) {
 
 function encode_base64(d, len) {
 	var off = 0;
-	var rs = [];
+	var rs = '';
 	var c1;
 	var c2;
 	if (len <= 0 || len > d.length)
 		throw "Invalid len";
 	while (off < len) {
 		c1 = d[off++] & 0xff;
-		rs.push(base64_code[(c1 >> 2) & 0x3f]);
+		rs += base64_code[(c1 >> 2) & 0x3f];
 		c1 = (c1 & 0x03) << 4;
 		if (off >= len) {
-			rs.push(base64_code[c1 & 0x3f]);
+			rs += base64_code[c1 & 0x3f];
 			break;
 		}
 		c2 = d[off++] & 0xff;
 		c1 |= (c2 >> 4) & 0x0f;
-		rs.push(base64_code[c1 & 0x3f]);
+		rs += base64_code[c1 & 0x3f];
 		c1 = (c2 & 0x0f) << 2;
 		if (off >= len) {
-			rs.push(base64_code[c1 & 0x3f]);
+			rs += base64_code[c1 & 0x3f];
 			break;
 		}
 		c2 = d[off++] & 0xff;
 		c1 |= (c2 >> 6) & 0x03;
-		rs.push(base64_code[c1 & 0x3f]);
-		rs.push(base64_code[c2 & 0x3f]);
+		rs += base64_code[c1 & 0x3f];
+		rs += base64_code[c2 & 0x3f];
 	}
-	return rs.join('');
+	return rs;
 };
 
 function char64(x) {
@@ -525,19 +525,18 @@ function hashpw(password, salt, progress) {
 	saltb = decode_base64(real_salt, BCRYPT_SALT_LEN);
 	hashed = crypt_raw(passwordb, saltb, rounds, progress);
 
-	var rs = [];
-	rs.push("$2");
+	var rs = '$2';
 	if (minor >= 'a')
-		rs.push(minor);
-	rs.push("$");
+		rs += minor;
+	rs += "$";
 	if (rounds < 10)
-		rs.push("0");
-	rs.push(rounds.toString());
-	rs.push("$");
-	rs.push(encode_base64(saltb, saltb.length));
-	rs.push(encode_base64(hashed, bf_crypt_ciphertext.length * 4 - 1));
+		rs += "0";
+	rs += rounds.toString();
+	rs += "$";
+	rs += encode_base64(saltb, saltb.length);
+	rs += encode_base64(hashed, bf_crypt_ciphertext.length * 4 - 1);
 
-	return(rs.join(''));
+	return(rs);
 };
 
 function gensalt(rounds) {
@@ -545,12 +544,11 @@ function gensalt(rounds) {
 	if (iteration_count < 4 || iteration_count > 31) {
 		iteration_count = GENSALT_DEFAULT_LOG2_ROUNDS;
 	}
-	var output = [];
-	output.push("$2a$");
+	var output = '$2a$';
 	if (iteration_count < 10)
-		output.push("0");
-	output.push(iteration_count.toString());
-	output.push('$');
+		output += '0';
+	output += iteration_count.toString();
+	output += '$';
 
 	var rand_buf;
 	try {
@@ -559,8 +557,8 @@ function gensalt(rounds) {
 		throw ex;
 	}
 
-	output.push(encode_base64(rand_buf, BCRYPT_SALT_LEN));
-	return output.join('');
+	output += encode_base64(rand_buf, BCRYPT_SALT_LEN);
+	return output;
 };
 
 function genSaltSync(rounds) {
