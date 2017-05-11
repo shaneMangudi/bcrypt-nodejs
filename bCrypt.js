@@ -432,6 +432,7 @@ function ekskey(data, key, P, S) {
 };
 
 function crypt_raw(password, salt, log_rounds, progress) {
+	var lr;
 	var rounds;
 	var j;
 	var cdata = bf_crypt_ciphertext.slice();
