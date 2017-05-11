@@ -40,7 +40,7 @@
         "crypto"
     ],
     "devDependencies": {
-        "mocha": "~1.8.2",
+        "mocha": "~3.2.0",
         "should": "~1.2.2",
         "eyespect": "~0.1.8",
         "async": "~0.2.6"
