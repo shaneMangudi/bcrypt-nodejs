@@ -31,7 +31,7 @@ or
 `yarn add bcrypt-nodejs`
 
 Synchronous
-```
+```javascript
 var hash = bcrypt.hashSync("bacon");
 
 bcrypt.compareSync("bacon", hash); // true
@@ -39,7 +39,7 @@ bcrypt.compareSync("veggies", hash); // false
 ```
 
 Asynchronous
-```
+```javascript
 bcrypt.hash("bacon", null, null, function(err, hash) {
   // Store hash in your password DB.
 });
