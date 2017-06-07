@@ -701,6 +701,11 @@ function getRounds(encrypted) {
 	return Number(encrypted.split("$")[2]);
 }
 
+function isHashed(password) {
+	if (!password) return false;
+	return password.split('$').length == 4;
+}
+
 exports.genSaltSync = genSaltSync;
 exports.genSalt = genSalt;
 exports.hashSync = hashSync;
@@ -708,3 +713,4 @@ exports.hash = hash;
 exports.compareSync = compareSync;
 exports.compare = compare;
 exports.getRounds = getRounds;
+exports.isHashed = isHashed;
