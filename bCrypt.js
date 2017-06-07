@@ -577,14 +577,23 @@ function genSaltSync(rounds) {
 function genSalt(rounds, callback) {
 	/*
 		rounds - [OPTIONAL] - the number of rounds to process the data for. (default - 10)
-		seed_length - [OPTIONAL] - RAND_bytes wants a length. to make that a bit flexible, you can specify a seed_length. (default - 20)
 		callback - [REQUIRED] - a callback to be fired once the salt has been generated. uses eio making it asynchronous.
 			error - First parameter to the callback detailing any errors.
 			salt - Second parameter to the callback providing the generated salt.
 	*/
-	if(!callback) {
-		throw "No callback function was given."
-	}
+   if (typeof rounds !== 'number') {
+      if (typeof rounds !== 'function' || typeof callback !== 'undefined') {
+         throw 'getSalt() recieved a wrong input.';
+      } else {
+         callback = rounds;
+         rounds = GENSALT_DEFAULT_LOG2_ROUNDS;
+      }
+   } else {
+      if (typeof callback !== 'function') {
+         throw "No callback function was given.";
+      }
+   }
+
 	process.nextTick(function() {
 		var result = null;
 		var error = null;
