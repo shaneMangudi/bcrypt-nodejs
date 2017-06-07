@@ -582,9 +582,19 @@ function genSalt(rounds, callback) {
 			error - First parameter to the callback detailing any errors.
 			salt - Second parameter to the callback providing the generated salt.
 	*/
-	if(!callback) {
-		throw "No callback function was given."
+	
+	if (arguments.length == 0)
+		throw new Error("No args");
+	
+	if (typeof rounds === 'function') {
+		callback = rounds;
+		rounds = 10;
 	}
+	
+	if(!callback) {
+		throw new Error("No callback function was given.");
+	}
+	
 	process.nextTick(function() {
 		var result = null;
 		var error = null;
