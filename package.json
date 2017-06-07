@@ -17,6 +17,7 @@
     "scripts": {
         "test": "make test"
     },
+    "license": "BSD-3-Clause",
     "bugs": {
         "url": "https://github.com/shaneGirish/bcrypt-nodejs/issues"
     },
