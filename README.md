@@ -22,6 +22,13 @@ Basically, to deploy one of my apps which uses [node.bcrypt.js] on a winx64 plat
 
 This code is based on [javascript-bcrypt] and uses [crypto] to create random byte arrays.
 
+##Installation
+
+You can install this module using [npm](https://www.npmjs.com/package/bcrypt-nodejs):
+
+```
+npm install --save bcrypt-nodejs
+```
 ## Basic usage:
 
 Installing the Package
