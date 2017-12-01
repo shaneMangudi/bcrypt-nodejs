@@ -4,6 +4,7 @@
     "main": "./bCrypt",
     "author": "Shane Girish <shaneGirish@gmail.com> (https://github.com/shaneGirish)",
     "version": "0.1.0",
+    "license" : "BSD-3-Clause",
     "bin": {
         "bcrypt-nodejs": "bin.js"
     },
